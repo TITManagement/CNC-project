@@ -22,7 +22,7 @@ import matplotlib.pyplot as plt
 
 from cnc_drivers.driver_base import CncDriver
 from cnc_common.gcode import LinearGCodeInterpreter, ModalState2D
-from cnc_common.jobs.base import Job, JobFactory
+from cnc_drivers.job_base import Job, JobFactory
 from cnc_common.platform.adapter import EnvironmentAdapter
 from cnc_common.runtime.config import ConfigLoader
 from cnc_common.runtime.jobs import JobDispatcher

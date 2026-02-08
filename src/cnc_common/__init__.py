@@ -7,7 +7,7 @@ to work.
 from importlib import import_module
 
 gcode = import_module("common.gcode")
-jobs = import_module("common.jobs")
+jobs = import_module("cnc_common.jobs")
 platform = import_module("common.platform")
 runtime = import_module("common.runtime")
 

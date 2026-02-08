@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from typing import Iterable, Mapping, Optional
 
-from common.jobs.base import JobFactory
+from cnc_drivers.job_base import JobFactory
 
 
 class JobDispatcher:

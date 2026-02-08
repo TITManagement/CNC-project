@@ -1,3 +1,3 @@
-"""Compatibility shim for `cnc_common.jobs.base` -> `common.jobs.base`."""
+"""Compatibility shim for `cnc_common.jobs.base` -> `cnc_drivers.job_base`."""
 
-from common.jobs.base import *  # noqa: F401,F403
+from cnc_drivers.job_base import *  # noqa: F401,F403
