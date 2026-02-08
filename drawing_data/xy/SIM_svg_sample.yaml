@@ -14,7 +14,7 @@ defaults:
 
 jobs:
   - type: svg
-    file: ../drawing.svg         # デフォルトサンプルファイル（drawing_data/drawing.svg）
+    file: drawing.svg            # デフォルトサンプルファイル（drawing_data/xy/drawing.svg）
     origin: [0, 0]
     px_to_mm: 0.264583
     chord_mm: 0.5

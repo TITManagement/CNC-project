@@ -18,7 +18,7 @@ defaults:
   feed: 800         # G-code の初期送り
 jobs:
   - type: svg
-    file: ../drawing.svg
+    file: drawing.svg
     origin: [0, 0]
     px_to_mm: 0.264583
     chord_mm: 0.5
