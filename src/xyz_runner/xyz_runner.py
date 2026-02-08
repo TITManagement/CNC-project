@@ -728,7 +728,7 @@ def process_step_file_simple(g, file_path, origin, resolution):
 
 def select_file_with_dialog(env: EnvironmentAdapter, title, filetypes):
     """GUIでファイルを選択（クロスプラットフォーム対応）"""
-    initial_dir = env.normalize_path("drawing_data")
+    initial_dir = str(ROOT_DIR / "drawing_data")
     if not os.path.exists(initial_dir):
         initial_dir = env.normalize_path(".")
     return env.select_file_dialog(title, filetypes, initialdir=initial_dir)

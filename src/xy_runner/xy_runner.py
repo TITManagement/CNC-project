@@ -599,7 +599,7 @@ class XYRunnerApp:
             return self.env.select_file_dialog(
                 "SVGファイルを選択してください",
                 [("SVG files", "*.svg"), ("All files", "*.*")],
-                initialdir=".",
+                initialdir=str(ROOT_DIR / "drawing_data"),
             )
         except EOFError:
             return None
