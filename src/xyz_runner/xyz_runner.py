@@ -9,6 +9,7 @@ Dependencies:
   pip install pyyaml matplotlib pyserial numpy svgpathtools pythonocc-core
 """
 import argparse
+import importlib.util
 import logging
 import math
 import os
@@ -241,50 +242,10 @@ class XYZRunnerApp:
         driver_name = self.args.driver or cfg.get("driver", "sim")
         if driver_name == "sim":
             return SimDriver3D()
-
-        port = cfg.get("port")
-        if not port:
-            logging.warning("driver=chuo を選択しましたが port が未設定のためシミュレーションを使用します。")
-            return SimDriver3D()
-
-        baud = int(cfg.get("baud", 9600))
-        timeout = float(cfg.get("timeout", 1.0))
-        write_timeout = float(cfg.get("write_timeout", 1.0))
-        accel = int(cfg.get("qt_accel", cfg.get("accel", 100)))
-        enable_response = bool(cfg.get("qt_enable_response", True))
-
-        mm_per_pulse_val: Optional[float] = None
-        mm_per_pulse = cfg.get("mm_per_pulse")
-        if mm_per_pulse is not None:
-            try:
-                mm_per_pulse_val = float(mm_per_pulse)
-            except (TypeError, ValueError):
-                logging.warning("mm_per_pulse が数値に変換できません: %s", mm_per_pulse)
-
-        mm_to_device_fn = None
-        if callable(mm_per_pulse):
-            mm_to_device_fn = mm_per_pulse  # type: ignore[assignment]
-
-        driver = ChuoDriver(
-            port=port,
-            baudrate=baud,
-            timeout=timeout,
-            write_timeout=write_timeout,
-            mm_per_pulse=mm_per_pulse_val,
-            mm_to_device=mm_to_device_fn,
-            enable_response=enable_response,
-            default_accel=accel,
+        raise SystemExit(
+            "XYZランナーの実機ドライバは現時点で未実装です。"
+            " 実機制御は xy_runner + cnc-drivers を使用してください。"
         )
-
-        driver_settings = cfg.get("driver_settings", {})
-        if isinstance(driver_settings, Mapping):
-            driver.set_speed_params(
-                rapid_speed=driver_settings.get("rapid_speed"),
-                cut_speed=driver_settings.get("cut_speed"),
-                accel=driver_settings.get("accel"),
-            )
-
-        return driver
 
     def _apply_defaults(self, gcode: GCodeWrapper3D, defaults: dict) -> None:
         if defaults.get("unit", "mm") == "mm":
@@ -787,12 +748,56 @@ def main():
     ap.add_argument("--no-animate", action="store_true", help="アニメーション無効化")
     ap.add_argument("--debug", action="store_true", help="[DEBUG]出力を有効化")
     ap.add_argument("--file", help="G-codeまたはSTEPファイルパス")
+    ap.add_argument("--preflight", action="store_true", help="実行前に依存関係のみ検証して終了")
     args = ap.parse_args()
     # logging はファイル先頭でインポート済み
     if args.debug:
         logging.basicConfig(level=logging.DEBUG, format="%(asctime)s [%(levelname)s] %(message)s")
     else:
         logging.basicConfig(level=logging.WARNING, format="%(asctime)s [%(levelname)s] %(message)s")
+
+    if args.preflight:
+        errors = []
+
+        # 実機ドライバ可否（XYZは未実装）
+        effective_driver = args.driver
+        cfg = None
+        if args.config:
+            try:
+                cfg_loader = ConfigLoader(
+                    lambda driver_name: {
+                        "driver": driver_name or "sim",
+                        "defaults": {"unit": "mm", "mode": "absolute", "feed": 1000},
+                        "visual": {"show": True, "animate": True, "fps": 1080, "title": "XYZ Runner"},
+                    }
+                )
+                cfg = cfg_loader.load(str(Path(args.config)), driver_override=args.driver)
+            except Exception as exc:
+                errors.append(f"設定ファイルの読み込みに失敗しました: {exc}")
+        if not effective_driver:
+            effective_driver = (cfg or {}).get("driver", "sim") if isinstance(cfg, Mapping) else "sim"
+        if effective_driver != "sim":
+            errors.append("XYZランナーの実機ドライバは未実装です（現在は sim のみサポート）。")
+
+        # STEP依存チェック（--file または YAML jobs）
+        needs_step = False
+        if args.file and Path(args.file).suffix.lower() in {".stp", ".step"}:
+            needs_step = True
+        if not needs_step and isinstance(cfg, Mapping):
+            for job in cfg.get("jobs", []) or []:
+                if isinstance(job, Mapping) and job.get("type") == "stp":
+                    needs_step = True
+                    break
+        if needs_step and importlib.util.find_spec("OCC") is None:
+            errors.append("STEP処理依存 'pythonocc-core' が未導入です（`pip install -e \".[step]\"`）。")
+
+        if errors:
+            for err in errors:
+                print(f"[NG] {err}")
+            raise SystemExit(1)
+        print("[OK] preflight: 依存関係チェックを通過しました。")
+        raise SystemExit(0)
+
     app = XYZRunnerApp(args)
     app.run(file_override=args.file)
 

@@ -9,6 +9,7 @@ Dependencies:
 """
 
 import argparse
+import importlib.util
 import logging
 import math
 import os
@@ -632,6 +633,7 @@ def main():
     ap.add_argument("--show", action="store_true")
     ap.add_argument("--no-animate", action="store_true")
     ap.add_argument("--debug", action="store_true", help="[DEBUG]出力を有効化")
+    ap.add_argument("--preflight", action="store_true", help="実行前に依存関係のみ検証して終了")
     args = ap.parse_args()
 
     # --- ログレベル設定 ---
@@ -641,6 +643,28 @@ def main():
         logging.basicConfig(level=logging.DEBUG, format="%(asctime)s [%(levelname)s] %(message)s")
     else:
         logging.basicConfig(level=logging.WARNING, format="%(asctime)s [%(levelname)s] %(message)s")
+
+    if args.preflight:
+        driver_name = args.driver
+        if not driver_name and args.config:
+            try:
+                cfg = ConfigLoader().load(str(Path(args.config)), driver_override=None)
+                driver_name = cfg.get("driver", "sim")
+            except Exception as exc:
+                print(f"[NG] 設定ファイルの読み込みに失敗しました: {exc}")
+                raise SystemExit(1)
+        if not driver_name:
+            driver_name = "sim"
+
+        errors = []
+        if driver_name != "sim" and importlib.util.find_spec("cnc_drivers") is None:
+            errors.append("実機ドライバ依存 'cnc_drivers' が未導入です（`pip install -e \".[machine]\"`）。")
+        if errors:
+            for err in errors:
+                print(f"[NG] {err}")
+            raise SystemExit(1)
+        print("[OK] preflight: 依存関係チェックを通過しました。")
+        raise SystemExit(0)
 
     app = XYRunnerApp(args)
     app.run(svg_override=args.svg)
