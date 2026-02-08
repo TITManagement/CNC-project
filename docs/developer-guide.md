@@ -28,7 +28,7 @@ CNC/
 1. `python -m xy_runner.xy_runner` を実行すると `XYRunnerApp.run()` が YAML を読み込みます。
 2. `_create_driver(cfg)` が設定ファイルの `driver` を確認します。
    - `driver == "sim"` なら `SimDriver` を生成。
-   - それ以外は `common.drivers.create_actual_driver(driver_name, cfg)` を呼びます。
+   - それ以外は `cnc_drivers.actual_machine_control.create_actual_driver(driver_name, cfg)` を呼びます。
 3. `create_actual_driver` は `actual_machine_control.py` 内で以下を実施します
    （直接 `create_chuo_driver()` や `create_gsc02_driver()` を呼び出すことも可能です）。
    - `_parse_mm_per_pulse()` で `mm_per_pulse` を整理。
