@@ -37,12 +37,12 @@ def _resolve_resource_path(file_entry: str, context: Mapping[str, object]) -> Pa
     if path.is_absolute():
         return path
 
-    # allow configs to refer to examples/foo.ext regardless of current dir
+    # allow configs to refer to drawing_data/foo.ext regardless of current dir
     parts = path.parts
-    tail_after_examples = None
-    if "examples" in parts:
-        idx = parts.index("examples")
-        tail_after_examples = Path(*parts[idx + 1 :]) if idx + 1 < len(parts) else Path(".")
+    tail_after_data_dir = None
+    if "drawing_data" in parts:
+        idx = parts.index("drawing_data")
+        tail_after_data_dir = Path(*parts[idx + 1 :]) if idx + 1 < len(parts) else Path(".")
 
     config_dir = Path(context.get("config_dir", Path.cwd()))
     project_root = Path(context.get("project_root", config_dir))
@@ -51,15 +51,15 @@ def _resolve_resource_path(file_entry: str, context: Mapping[str, object]) -> Pa
         config_dir,
         config_dir.parent,
         project_root,
-        project_root / "examples",
-        project_root / "examples" / "example_xyz",
+        project_root / "drawing_data",
+        project_root / "drawing_data" / "example_xyz",
     ):
         if base and base not in candidates:
             candidates.append(base)
 
     relative_targets = [path]
-    if tail_after_examples:
-        relative_targets.append(tail_after_examples)
+    if tail_after_data_dir:
+        relative_targets.append(tail_after_data_dir)
 
     for rel in relative_targets:
         for base in candidates:
@@ -728,7 +728,7 @@ def process_step_file_simple(g, file_path, origin, resolution):
 
 def select_file_with_dialog(env: EnvironmentAdapter, title, filetypes):
     """GUIでファイルを選択（クロスプラットフォーム対応）"""
-    initial_dir = env.normalize_path("examples")
+    initial_dir = env.normalize_path("drawing_data")
     if not os.path.exists(initial_dir):
         initial_dir = env.normalize_path(".")
     return env.select_file_dialog(title, filetypes, initialdir=initial_dir)

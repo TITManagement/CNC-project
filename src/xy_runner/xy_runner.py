@@ -35,13 +35,13 @@ def _resolve_resource_path(file_entry: str, context: Mapping[str, Any]) -> Path:
     if path.is_absolute():
         return path
 
-    # If path contains "examples/", keep both the original and the tail-after-examples
+    # If path contains "drawing_data/", keep both the original and the tail-after-drawing_data
     # to make configs portable across install locations.
     parts = path.parts
-    tail_after_examples = None
-    if "examples" in parts:
-        idx = parts.index("examples")
-        tail_after_examples = Path(*parts[idx + 1 :]) if idx + 1 < len(parts) else Path(".")
+    tail_after_data_dir = None
+    if "drawing_data" in parts:
+        idx = parts.index("drawing_data")
+        tail_after_data_dir = Path(*parts[idx + 1 :]) if idx + 1 < len(parts) else Path(".")
 
     # context entries may be Path or str; coerce to str before constructing Path
     config_dir = Path(str(context.get("config_dir", Path.cwd())))
@@ -51,15 +51,15 @@ def _resolve_resource_path(file_entry: str, context: Mapping[str, Any]) -> Path:
         config_dir,
         config_dir.parent,
         project_root,
-        project_root / "examples",
-        project_root / "examples" / "example_xy",
+        project_root / "drawing_data",
+        project_root / "drawing_data" / "example_xy",
     ):
         if base and base not in candidates:
             candidates.append(base)
 
     relative_targets = [path]
-    if tail_after_examples:
-        relative_targets.append(tail_after_examples)
+    if tail_after_data_dir:
+        relative_targets.append(tail_after_data_dir)
 
     for rel in relative_targets:
         for base in candidates:
@@ -611,7 +611,7 @@ def select_config_interactive():
     chosen = adapter.select_file_dialog(
         "YAML設定ファイルを選択してください",
         [("YAML files", "*.yaml"), ("All files", "*.*")],
-        initialdir=str(ROOT_DIR / "examples"),
+        initialdir=str(ROOT_DIR / "drawing_data"),
     )
     if chosen:
         resolved = Path(chosen).expanduser().resolve()
