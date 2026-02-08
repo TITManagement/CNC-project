@@ -20,7 +20,7 @@ from typing import Any, Mapping, Optional
 
 import matplotlib.pyplot as plt
 
-from common.drivers import CncDriver
+from cnc_drivers.driver_base import CncDriver
 from cnc_common.gcode import LinearGCodeInterpreter, ModalState2D
 from cnc_common.jobs.base import Job, JobFactory
 from cnc_common.platform.adapter import EnvironmentAdapter

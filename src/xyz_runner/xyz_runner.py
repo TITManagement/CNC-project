@@ -18,7 +18,7 @@ from pathlib import Path
 from typing import Mapping, Optional
 import matplotlib.pyplot as plt
 
-from common.drivers import CncDriver, ChuoDriver
+from cnc_drivers.driver_base import CncDriver
 from common.gcode import LinearGCodeInterpreter, ModalState3D
 from common.jobs import Job, JobFactory
 from common.platform import EnvironmentAdapter
