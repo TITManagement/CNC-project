@@ -1,0 +1,29 @@
+# XYZ runner用 3Dグリッド球体パターン設定例
+driver: chuo
+port: /dev/tty.usbserial-XXXX
+baud: 9600
+mm_per_pulse: 0.0005
+qt_enable_response: true
+
+driver_settings:
+  rapid_speed: 5000
+  cut_speed: 1500
+  accel: 150
+defaults:
+  unit: mm
+  mode: absolute
+  feed: 1000
+
+jobs:
+  - type: grid_spheres
+    origin: [0, 0, 0]   # XYZ原点
+    area: [100, 100, 50]  # XYZ範囲
+    cell: 20            # セル間隔
+    sphere_d: 15        # 球体直径
+    feed: 800
+
+visual:
+  show: true
+  animate: true
+  fps: 60
+  title: "3D Grid Spheres Animation"

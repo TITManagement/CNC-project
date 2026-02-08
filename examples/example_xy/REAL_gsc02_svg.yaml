@@ -1,0 +1,33 @@
+# GSC-02 実機用サンプル設定
+driver: gsc02
+port: /dev/tty.usbserial-GSC02
+baud: 9600          # 必要に応じて 2400/4800/9600/19200 を選択
+timeout: 1.5
+write_timeout: 1.5
+mm_per_pulse: 0.001  # 1パルスあたりのmm
+gsc_enable_response: true
+
+# 任意: driver_settings で送り/加速度を指定 (set_speed_params に反映)
+driver_settings:
+  rapid_speed: 3000
+  cut_speed: 1200
+  accel: 100
+defaults:
+  unit: mm
+  mode: absolute
+  feed: 800         # G-code の初期送り
+jobs:
+  - type: svg
+    file: ../drawing.svg
+    origin: [0, 0]
+    px_to_mm: 0.264583
+    chord_mm: 0.5
+    feed: 600
+    y_flip: true
+    svg_height_mm: 297
+    sort_paths: true
+visual:
+  show: true
+  animate: false
+  title: "GSC-02 実機描画"
+# OptoSigma GSC-02 実機でSVG描画を行う例。共通パラメータ + GSC固有のポートを設定して使う。

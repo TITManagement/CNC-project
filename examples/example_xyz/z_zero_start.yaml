@@ -1,0 +1,20 @@
+# XYZ runner用 Z=0から開始する設定例
+driver: sim
+defaults:
+  unit: mm
+  mode: absolute
+  feed: 800
+
+jobs:
+  - type: grid_spheres
+    origin: [0, 0, 0]   # XY平面（Z=0）から開始
+    area: [80, 80, 40]  # XYZ範囲
+    cell: 20            # セル間隔
+    sphere_d: 12        # 球体直径
+    feed: 1000
+
+visual:
+  show: true
+  animate: true
+  fps: 60
+  title: "Z=0 Start 3D Pattern"

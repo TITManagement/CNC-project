@@ -1,0 +1,15 @@
+# XYZ runner用 立方体パターン（G-code）
+driver: sim
+defaults:
+  unit: mm
+  mode: absolute
+  feed: 1200
+
+jobs:
+  - type: gcode
+    file: "cube.gcode"
+    origin: [0, 0, 0]
+
+visual:
+  show: true
+  title: "3D Cube Pattern (G-code)"

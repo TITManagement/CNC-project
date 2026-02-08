@@ -1,0 +1,25 @@
+# XY ランナー (SVG) で格子状パターンを描画するサンプル
+driver: sim          # 実機を使う場合は 'chuo' に変更し、REAL_chuo_svg.yaml を参照
+
+visual:
+  show: true
+  animate: true
+  title: "Grid in-circle demo"
+  fps: 1200
+
+defaults:
+  unit: mm
+  mode: absolute
+  feed: 1200
+
+jobs:
+  - type: grid_circles
+    origin: [0, 0]
+    area: [100, 100]
+    cell: 20
+    circle_d: 20
+    cw: false
+    dwell_ms: 0
+    snake: true
+
+# 格子状の円パターンを描画するサンプル。実機でもシミュレーションでも同じ設定で試せる。

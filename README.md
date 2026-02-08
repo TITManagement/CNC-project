@@ -1,74 +1,243 @@
+# CNC XY/XYZ Runner（クロスプラットフォーム対応）
 
-# Project Template
+<div align="center">
 
-このリポジトリはテンプレートプロジェクトです。`advanced-image-editor` の構造を参考にしています。
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/release/python-380/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)]()
 
----
+**SVG・G-code・STEPファイル対応CNCコントローラ：Windows・Mac・Linuxで動作！**
 
-## フォルダ構成
+[特徴](#特徴) ・ [インストール](#インストール) ・ [使い方](#使い方) ・ [構成](#構成) ・ [ライセンス](#ライセンス)
 
-- `docs/` : ドキュメント
-- `scripts/` : スクリプト
-- `src/` : ソースコード
+</div>
 
----
+## 概要
 
-## クイックスタート
+汎用ドローソフト（Inkscape, Illustrator, PowerPoint等）で作成したSVG図形、G-codeファイル、STEPファイルをCNC制御で実行するクロスプラットフォーム対応Pythonツールです。
 
-```sh
-git clone <your-repo-url>
-cd project_template
-python scripts/setup_dev_environment.py
-.venv/bin/python src/main_plugin.py
+### サポートプラットフォーム
+- 🪟 **Windows** (Windows 10/11)
+- 🍎 **macOS** (macOS 10.15+)
+- 🐧 **Linux** (Ubuntu 24.04, その他ディストリビューション)
+
+### 主な機能
+
+- **2D制御 (xy_runner)**: SVG（Inkscape, Illustrator, PowerPoint等） → CNC制御
+- **3D制御 (xyz_runner)**: G-codeファイル・STEPファイル → 3D CNC制御
+- GUIによる直感的なファイル選択
+- matplotlibによる軌跡シミュレーション（2D/3D）
+- 中央精機 QT-BMM2 / OptoSigma GSC-02 ステージ対応（シリアル通信）
+- クロスプラットフォーム自動セットアップ
+
+## 特徴
+
+### 2D制御 (xy_runner)
+- ✅ SVG図形（Inkscape, Illustrator, PowerPoint等）をそのままCNCで描画
+- ✅ SVGファイルの対話的選択
+- ✅ 2D軌跡のリアルタイムシミュレーション
+
+### 3D制御 (xyz_runner)
+- ✅ G-codeファイル・STEPファイル直接実行
+- ✅ 3D軌跡アニメーション表示
+- ✅ ファイル選択のみのシンプルUI
+
+### 共通機能
+- ✅ クロスプラットフォーム対応（Windows・macOS・Linux）
+- ✅ 実機制御（中央精機 QT-BMM2 / OptoSigma GSC-02 ステージ）
+- ✅ プラットフォーム別自動セットアップ
+- ✅ 安全リミット設定
+- ✅ 拡張性の高いドライバ設計
+
+## インストール
+
+### 🛠️ インストール手順（推奨）
+
+```bash
+# リポジトリ取得
+git clone https://github.com/TITManagement/CNC.git
+cd CNC
+
+# 仮想環境作成
+python3 -m venv .venv_CNC
+source .venv_CNC/bin/activate
+
+# 依存ライブラリインストール（開発モード）
+pip install --no-build-isolation -e .
 ```
 
----
+Windows の場合は `.\.venv_CNC\Scripts\activate` を使用してください。
 
-## テンプレートの使い方
+## 使い方
 
-### 新規リポジトリとして使う場合
-1. GitHub上で「テンプレートとして使用」ボタンをクリックし、新しいリポジトリを作成します。
-2. 作成したリポジトリをローカルにクローンします。
-3. `scripts/setup_dev_environment.py` を実行して開発環境をセットアップします。
+### 1. 描画ソフトで図形作成 → SVG保存
+Inkscape, Illustrator, PowerPointなど任意のドローソフトで図形（テキスト不可）を作成し、SVG形式で保存してください。
+（PowerPointの場合は「ファイル → エクスポート → SVG形式」で保存、「現在のスライド」を選択）
 
-### 既存リポジトリに適用する場合
-1. テンプレートリポジトリを一時的にクローンし、必要なファイルやフォルダ（`docs/`, `scripts/`, `src/`, 各種設定ファイルなど）を既存リポジトリにコピーします。
-2. `.gitignore` や `pyproject.toml` など、既存のものと競合しないように調整します。
-3. 必要に応じて `setup_dev_environment.py` で環境構築を行います。
+### 2. GUI で実行（推奨）
+```bash
+xy-runner-gui   # venv を有効化した状態で実行
+```
+- 1つのウィンドウで「ドライバ（SIM/REAL）」「YAML設定」「SVG/G-code」を指定して実行できます。
 
----
+### 3. CLI で実行（従来スタイル）
+```bash
+python -m xy_runner.xy_runner --config examples/example_xy/SIM_svg_sample.yaml
+# 3D ランナー（任意）
+python -m xyz_runner.xyz_runner --config examples/example_xyz/SIM_step_sphere.yaml
+```
+サンプルYAML（XYZ）
+- `SIM_basic_gcode.yaml`（単純なG-code）
+- `SIM_gcode_cube.yaml`（立方体G-code）
+- `SIM_gcode_spiral.yaml`（螺旋G-code）
+- `SIM_step_sphere.yaml`（単一STEP球）
+- `SIM_step_multi_spheres.yaml`（複数STEP球）
+- `SIM_visual_fast.yaml`（高速アニメーションデモ）
 
-## OSごとのパッケージインストール例
+## 構成
 
-Windows:
-```sh
-pip install -r requirements-windows.txt
+```
+CNC/
+├── src/                    # ソースコード
+│   ├── common/             # 共有ロジック
+│   ├── xy_runner/          # 2D ランナー
+│   │   └── xy_runner.py    # メインスクリプト
+│   └── xyz_runner/         # 3D ランナー
+│       └── xyz_runner.py   # メインスクリプト
+├── examples/               # 設定・サンプル
+│   ├── example_xy/         # XY 用 YAML
+│   ├── example_xyz/        # XYZ 用 YAML (G-code/STEP サンプル)
+│   └── drawing.svg         # SVGサンプル
+├── docs/                   # ドキュメント
+│   ├── user-guide.md       # ユーザーガイド
+│   └── developer-guide.md  # 開発者ガイド
+├── env_setup.py            # 仮想環境セットアップ補助
+├── pyproject.toml          # パッケージ設定
+└── README.md               # このファイル
+```
+driver: sim                 # シミュレーション or 'chuo'で実機
+svg_file: select            # GUIでSVGファイル選択
+
+motion_params:
+  cut_speed: 100            # 描画速度 (mm/min)
+  lift_height: 5            # Z軸リフト高さ
+
+```yaml
+# examples/example_xy/SIM_svg_sample.yaml
+driver: sim
+svg_file: select            # GUIでSVGファイル選択
+visual:
+  animate: true
+  title: "CNC XY Simulation"
+
+# driver: chuo を用いる場合の例（XY ランナー）
+driver: chuo
+port: /dev/tty.usbserial-XXXX
+baud: 9600
+mm_per_pulse: 0.0005        # 1パルスあたりのmm
+qt_enable_response: true    # 必要に応じてレスポンスを有効化
+driver_settings:
+  rapid_speed: 3000         # 早送り速度 (mm/min)
+  cut_speed: 1200           # 描画速度 (mm/min)
+  accel: 100                # 加減速パラメータ
+
+# driver: chuo を用いる場合の例（XYZ ランナー）
+driver: chuo
+port: /dev/tty.usbserial-XXXX
+baud: 9600
+mm_per_pulse: 0.0005
+qt_enable_response: true
+driver_settings:
+  rapid_speed: 5000
+  cut_speed: 1500
+  accel: 150
+
+# driver: gsc02 を用いる場合の例（XY ランナー）
+driver: gsc02
+port: /dev/tty.usbserial-GSC02
+baud: 9600
+timeout: 1.5
+write_timeout: 1.5
+mm_per_pulse: 0.001
 ```
 
-macOS:
-```sh
-pip install -r requirements-macos.txt
+
+## 実機対応
+
+### 中央精機XYステージ
+```
+- PySerialによるシリアル通信
+- COMポート・ボーレート設定可能
+- 位置フィードバック
+- 安全リミット管理
 ```
 
-Linux:
-```sh
-pip install -r requirements-linux.txt
+### OptoSigma GSC-02
+```
+- RS-232C (RTS/CTS) ベースの ASCII プロトコル
+- 既定速度テーブルの設定（Dコマンド）
+- 原点復帰方向の切り替え
+- Busy/Ready 応答による状態監視
 ```
 
-共通パッケージのみ:
-```sh
-pip install -r requirements.txt
-```
+### シミュレーションモード
+- 実機不要
+- matplotlibで軌跡表示
+- アニメーション・プレビュー
 
----
+## ドキュメント
 
-## 注意点
+- 📖 [ユーザーガイド](docs/user-guide.md)
+- 🔧 [開発者ガイド](docs/developer-guide.md)
+- 📚 [総合ドキュメント](docs/index.md)
+- 🧪 [検証ガイド](VERIFICATION_GUIDE.md)
 
-- 既存リポジトリに適用する場合は、上書きや競合に注意してください。
-- テンプレートの内容はプロジェクトに合わせてカスタマイズ可能です。
+## コントリビュート
 
----
+開発・改善への参加歓迎！詳細は[開発者ガイド](docs/developer-guide.md)参照。
+
+### 開発フロー
+1. リポジトリをフォーク
+2. フィーチャーブランチ作成
+3. テスト付きで修正
+4. コード品質チェック（black, mypy等）
+5. プルリクエスト提出
+
+## 主な用途
+
+- 試作・研究用途のパターン生成
+- 教育・CNC原理学習
+- 実験自動化
+- 製造現場での図形→動作変換
+
+## 技術情報
+
+- Python 3.8以上対応
+- 主要依存：PyYAML, matplotlib, PySerial, svgpathtools
+- モジュール設計：ドライバ拡張可能
+- テスト：pytest
+- コード品質：black, mypy
 
 ## ライセンス
 
-MIT
+MITライセンス（詳細は[LICENSE](LICENSE)参照）
+
+## サポート
+
+- 📧 info@titmanagement.com
+- 🐛 [GitHub Issues](https://github.com/TITManagement/CNC/issues)
+- 📖 [総合ドキュメント](docs/index.md)
+
+---
+
+<div align="center">
+<strong>SVG図形（Inkscape, Illustrator, PowerPoint等）をCNCで自在に動かす！教育・研究・製造現場で活用できます。</strong>
+</div>
+# driver: gsc02 を用いる場合の例（XY ランナー）
+driver: gsc02
+port: /dev/tty.usbserial-GSC02
+baud: 9600
+timeout: 1.5
+write_timeout: 1.5
+mm_per_pulse: 0.001

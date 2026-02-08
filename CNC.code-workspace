@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../../../app/CNC"
+		},
+		{
+			"path": "../.."
+		},
+		{
+			"path": "../../../app/AbnormalSoundDetection"
+		}
+	],
+	"settings": {}
+}

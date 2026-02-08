@@ -1,0 +1,20 @@
+# XYZ runner用 高速アニメーション設定例（ビジュアルデモ）
+driver: sim
+defaults:
+  unit: mm
+  mode: absolute
+  feed: 1200
+
+jobs:
+  - type: grid_spheres
+    origin: [0, 0, 0]
+    area: [60, 60, 30]  # 小さい範囲で高速
+    cell: 15            # 密度を上げる
+    sphere_d: 8         # 小さい球体
+    feed: 1000
+
+visual:
+  show: true
+  animate: true
+  fps: 120            # 高速アニメーション
+  title: "Fast 3D Animation"

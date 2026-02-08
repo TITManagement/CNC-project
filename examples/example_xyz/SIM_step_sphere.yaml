@@ -1,0 +1,18 @@
+# XYZ runner用 STEP球体サンプル
+driver: sim
+defaults:
+  unit: mm
+  mode: absolute
+  feed: 1200
+
+jobs:
+  - type: stp
+    file: "sphere_sample.stp"  # STEPファイルパス
+    origin: [0, 0, 0]  # XYZ原点オフセット
+    resolution: 0.5    # 分解能 [mm]
+
+visual:
+  show: true
+  animate: true
+  fps: 30
+  title: "STEP Sphere Animation"

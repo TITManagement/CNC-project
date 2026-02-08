@@ -1,0 +1,25 @@
+# XY runner用 SVG選択サンプル（実行時にファイル指定）
+driver: sim
+
+visual:
+  show: true
+  animate: true
+  title: "SVG draw demo (file select)"
+  fps: 1200
+
+defaults:
+  unit: mm
+  mode: absolute
+  feed: 1200
+
+jobs:
+  - type: svg
+    file:                     # 空欄でファイル選択ダイアログ
+    origin: [0, 0]
+    px_to_mm: 0.264583
+    chord_mm: 0.5
+    feed: 1000
+    y_flip: false
+    sort_paths: true
+
+# 実行時にファイル選択ダイアログを表示する設定。手元のSVGを選んで結果を確認する用途向け。

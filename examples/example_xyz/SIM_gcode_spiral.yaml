@@ -1,0 +1,15 @@
+# XYZ runner用 螺旋パターン（G-code）
+driver: sim
+defaults:
+  unit: mm
+  mode: absolute
+  feed: 1200
+
+jobs:
+  - type: gcode
+    file: "spiral.gcode"
+    origin: [0, 0, 0]
+
+visual:
+  show: true
+  title: "3D Spiral Pattern (G-code)"

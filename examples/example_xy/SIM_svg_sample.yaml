@@ -1,0 +1,24 @@
+# XY runner用 SVGサンプル（既定ファイル）
+driver: sim
+
+visual:
+  show: true
+  animate: true
+  title: "SVG draw demo (default sample)"
+  fps: 1200
+
+defaults:
+  unit: mm
+  mode: absolute
+  feed: 1200
+
+jobs:
+  - type: svg
+    file: ../drawing.svg         # デフォルトサンプルファイル（examples/drawing.svg）
+    origin: [0, 0]
+    px_to_mm: 0.264583
+    chord_mm: 0.5
+    feed: 1000
+    y_flip: false
+    sort_paths: true
+# 最小構成でXYランナーを試すためのサンプル設定。SVGファイルだけ指定すれば動作確認できる。

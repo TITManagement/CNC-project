@@ -1,12 +1,66 @@
-[tool.poetry]
-name = "project_template"
-version = "0.1.0"
-description = "テンプレートプロジェクト"
-authors = ["TITManagement <info@titmanagement.com>"]
-
-[tool.poetry.dependencies]
-python = ">=3.8,<4.0"
-
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cnc-runner"
+version = "0.1.0"
+description = "Cross-platform CNC XY/XYZ runner utilities"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.8"
+authors = [{ name = "CNC Maintainers" }]
+
+dependencies = [
+    "matplotlib>=3.5",
+    "numpy>=1.23",
+    "pyserial>=3.5",
+    "PyYAML>=5.4",
+    "svgpathtools>=1.5",
+]
+
+[project.optional-dependencies]
+step = ["pythonocc-core>=7.6"]
+machine = ["cnc-drivers>=0.1.0"]
+
+[project.scripts]
+xy-runner = "xy_runner.xy_runner:main"
+xyz-runner = "xyz_runner.xyz_runner:main"
+xy-runner-gui = "xy_runner.gui_launcher:main"
+xyz-runner-gui = "xyz_runner.gui_launcher:main"
+
+[project.urls]
+Homepage = "https://github.com/TITManagement/CNC"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["common*", "cnc_common*", "xy_runner*", "xyz_runner*"]
+namespaces = true
+exclude = ["archived*"]
+
+[tool.setuptools.package-data]
+# 同梱するサンプル設定/リソース
+"xy_runner" = [
+    "../examples/example_xy/*.yaml",
+    "../examples/*.svg",
+]
+"xyz_runner" = [
+    "../examples/example_xyz/*.yaml",
+    "../examples/example_xyz/*.gcode",
+    "../examples/example_xyz/*.stp",
+]
+
+[tool.setuptools.data-files]
+"share/cnc_runner/examples/example_xy" = ["examples/example_xy/*.yaml"]
+"share/cnc_runner/examples" = ["examples/*.svg"]
+"share/cnc_runner/examples/example_xyz" = [
+    "examples/example_xyz/*.yaml",
+    "examples/example_xyz/*.gcode",
+    "examples/example_xyz/*.stp",
+]

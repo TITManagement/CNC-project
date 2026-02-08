@@ -1,0 +1,17 @@
+# XYZ runner用 基本G-code設定（サンプル）
+driver: sim
+defaults:
+  unit: mm
+  mode: absolute
+  feed: 1200
+
+jobs:
+  - type: gcode
+    file: "sample.gcode"  # G-codeファイルパス
+    origin: [0, 0, 0]  # XYZ原点オフセット
+
+visual:
+  show: true
+  animate: true
+  fps: 30
+  title: "Basic G-code 3D Animation"
