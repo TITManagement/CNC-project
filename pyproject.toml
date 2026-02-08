@@ -47,20 +47,20 @@ exclude = ["archived*"]
 [tool.setuptools.package-data]
 # 同梱するサンプル設定/リソース
 "xy_runner" = [
-    "../examples/example_xy/*.yaml",
-    "../examples/*.svg",
+    "../drawing_data/example_xy/*.yaml",
+    "../drawing_data/*.svg",
 ]
 "xyz_runner" = [
-    "../examples/example_xyz/*.yaml",
-    "../examples/example_xyz/*.gcode",
-    "../examples/example_xyz/*.stp",
+    "../drawing_data/example_xyz/*.yaml",
+    "../drawing_data/example_xyz/*.gcode",
+    "../drawing_data/example_xyz/*.stp",
 ]
 
 [tool.setuptools.data-files]
-"share/cnc_runner/examples/example_xy" = ["examples/example_xy/*.yaml"]
-"share/cnc_runner/examples" = ["examples/*.svg"]
-"share/cnc_runner/examples/example_xyz" = [
-    "examples/example_xyz/*.yaml",
-    "examples/example_xyz/*.gcode",
-    "examples/example_xyz/*.stp",
+"share/cnc_runner/drawing_data/example_xy" = ["drawing_data/example_xy/*.yaml"]
+"share/cnc_runner/drawing_data" = ["drawing_data/*.svg"]
+"share/cnc_runner/drawing_data/example_xyz" = [
+    "drawing_data/example_xyz/*.yaml",
+    "drawing_data/example_xyz/*.gcode",
+    "drawing_data/example_xyz/*.stp",
 ]

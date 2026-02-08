@@ -30,17 +30,17 @@
 
 ### CLI での実行例
 ```bash
-python -m xy_runner.xy_runner --config examples/example_xy/SIM_svg_sample.yaml
+python -m xy_runner.xy_runner --config drawing_data/example_xy/SIM_svg_sample.yaml
 # 3D ランナーの例
-python -m xyz_runner.xyz_runner --config examples/example_xyz/SIM_step_sphere.yaml
+python -m xyz_runner.xyz_runner --config drawing_data/example_xyz/SIM_step_sphere.yaml
 ```
 
 ### 設定ファイル
-- `examples/example_xy/SIM_svg_sample.yaml` - SVGファイル選択ダイアログ付きの設定
-- `examples/example_xy/SIM_svg_select.yaml` - 実行時にSVGを選択する設定
-- `examples/example_xy/SIM_svg_grid_circles.yaml` - グリッドパターン生成
-- `examples/example_xy/REAL_chuo_svg.yaml` - 実機（QT-BMM2）制御用設定
-- `examples/example_xy/REAL_gsc02_svg.yaml` - 実機（GSC-02）制御用設定
+- `drawing_data/example_xy/SIM_svg_sample.yaml` - SVGファイル選択ダイアログ付きの設定
+- `drawing_data/example_xy/SIM_svg_select.yaml` - 実行時にSVGを選択する設定
+- `drawing_data/example_xy/SIM_svg_grid_circles.yaml` - グリッドパターン生成
+- `drawing_data/example_xy/REAL_chuo_svg.yaml` - 実機（QT-BMM2）制御用設定
+- `drawing_data/example_xy/REAL_gsc02_svg.yaml` - 実機（GSC-02）制御用設定
 - XYZ用サンプル: `SIM_basic_gcode.yaml` / `SIM_gcode_cube.yaml` / `SIM_gcode_spiral.yaml` / `SIM_step_sphere.yaml` / `SIM_step_multi_spheres.yaml` / `SIM_visual_fast.yaml`
 - `driver_settings` セクションで `rapid_speed` / `cut_speed` / `accel` を設定すると、中央精機ステージの速度・加速度が適用されます。
 

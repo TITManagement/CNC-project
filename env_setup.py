@@ -49,7 +49,7 @@ def main() -> int:
         print(r"  python src\xy_runner\xy_runner.py --config examples\example_xy\SIM_svg_sample.yaml")
     else:
         print("  source .venv/bin/activate")
-        print("  python src/xy_runner/xy_runner.py --config examples/example_xy/SIM_svg_sample.yaml")
+        print("  python src/xy_runner/xy_runner.py --config drawing_data/example_xy/SIM_svg_sample.yaml")
     return 0
 
 

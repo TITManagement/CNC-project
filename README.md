@@ -83,9 +83,9 @@ xy-runner-gui   # venv を有効化した状態で実行
 
 ### 3. CLI で実行（従来スタイル）
 ```bash
-python -m xy_runner.xy_runner --config examples/example_xy/SIM_svg_sample.yaml
+python -m xy_runner.xy_runner --config drawing_data/example_xy/SIM_svg_sample.yaml
 # 3D ランナー（任意）
-python -m xyz_runner.xyz_runner --config examples/example_xyz/SIM_step_sphere.yaml
+python -m xyz_runner.xyz_runner --config drawing_data/example_xyz/SIM_step_sphere.yaml
 ```
 サンプルYAML（XYZ）
 - `SIM_basic_gcode.yaml`（単純なG-code）
@@ -105,7 +105,7 @@ CNC/
 │   │   └── xy_runner.py    # メインスクリプト
 │   └── xyz_runner/         # 3D ランナー
 │       └── xyz_runner.py   # メインスクリプト
-├── examples/               # 設定・サンプル
+├── drawing_data/               # 設定・サンプル
 │   ├── example_xy/         # XY 用 YAML
 │   ├── example_xyz/        # XYZ 用 YAML (G-code/STEP サンプル)
 │   └── drawing.svg         # SVGサンプル
@@ -124,7 +124,7 @@ motion_params:
   lift_height: 5            # Z軸リフト高さ
 
 ```yaml
-# examples/example_xy/SIM_svg_sample.yaml
+# drawing_data/example_xy/SIM_svg_sample.yaml
 driver: sim
 svg_file: select            # GUIでSVGファイル選択
 visual:

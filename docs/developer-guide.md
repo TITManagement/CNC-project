@@ -18,7 +18,7 @@ CNC/
 │   │   └── ...                            # gcode, jobs, runtime などの共通モジュール
 │   ├── xy_runner/         # 2D ランナー（CLI エントリ）
 │   └── xyz_runner/        # 3D ランナー（CLI エントリ）
-├── examples/              # YAML 設定とサンプルデータ
+├── drawing_data/              # YAML 設定とサンプルデータ
 ├── docs/                  # ドキュメント
 └── pyproject.toml         # パッケージ設定
 ```
@@ -49,7 +49,7 @@ driver: sim
 motion_params:
   rapid_speed: 1000
   cut_speed: 100
-svg_file: examples/drawing.svg
+svg_file: drawing_data/drawing.svg
 ```
 
 ### 中央精機（QT-BMM2）を利用する場合
@@ -121,6 +121,6 @@ write_timeout: 1.5
 1. 必要に応じてシリアルプロトコル用のラッパ（`*_controller.py`）を実装する。
 2. ステージ制御クラス（`*_stage_driver.py`）で `CncDriver` を継承し、`move_abs` などのインターフェースを実装する。
 3. `actual_machine_control.py` に `_init_*` / `_build_*_kwargs` を追加し、`create_actual_driver` に分岐を増やす。
-4. YAML サンプルを `examples/` に追加し、ユーザー／開発者ガイドへ説明を追記する。
+4. YAML サンプルを `drawing_data/` に追加し、ユーザー／開発者ガイドへ説明を追記する。
 
 この流れに従うことで、新しい実機ドライバを追加しても CLI 側のコード変更は最小限で済みます。
