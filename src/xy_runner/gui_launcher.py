@@ -10,14 +10,21 @@ from pathlib import Path
 from types import SimpleNamespace
 from typing import Optional
 
-import customtkinter as ctk
 import tkinter.filedialog as fd
 import tkinter.font as tkfont
 
 from xy_runner.xy_runner import XYRunnerApp
 
+try:
+    import customtkinter as ctk
+except ModuleNotFoundError as exc:
+    ctk = None
+    _CTK_IMPORT_ERROR = exc
+else:
+    _CTK_IMPORT_ERROR = None
 
-class RunnerGUI(ctk.CTk):
+
+class RunnerGUI(ctk.CTk if ctk else object):
     def __init__(self):
         super().__init__()
         self.title("XY Runner Launcher")
@@ -151,6 +158,12 @@ class RunnerGUI(ctk.CTk):
 
 
 def main():
+    if ctk is None:
+        print(
+            "customtkinter が未導入です。GUIを使うには `pip install -e \".[gui]\"` "
+            "または `pip install customtkinter` を実行してください。"
+        )
+        raise SystemExit(1) from _CTK_IMPORT_ERROR
     ctk.set_appearance_mode("system")
     ctk.set_default_color_theme("blue")
     app = RunnerGUI()

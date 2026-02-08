@@ -601,6 +601,12 @@ def load_gcode_or_stp(file_path):
             reader.TransferRoots()
             shape = reader.Shape()
             return "stp", shape
+        except ModuleNotFoundError:
+            print(
+                "STEP処理には pythonocc-core が必要です。"
+                " `pip install -e \".[step]\"` で導入してください。"
+            )
+            return None, None
         except Exception as e:
             print(f"STEPファイル読み込みエラー: {e}")
             return None, None

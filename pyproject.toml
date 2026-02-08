@@ -22,6 +22,7 @@ dependencies = [
 [project.optional-dependencies]
 step = ["pythonocc-core>=7.6"]
 machine = ["cnc-drivers>=0.1.0"]
+gui = ["customtkinter>=5.2"]
 
 [project.scripts]
 xy-runner = "xy_runner.xy_runner:main"

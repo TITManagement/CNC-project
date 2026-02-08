@@ -8,13 +8,20 @@ from pathlib import Path
 from types import SimpleNamespace
 from typing import Optional
 
-import customtkinter as ctk
 import tkinter.filedialog as fd
 
 from xyz_runner.xyz_runner import XYZRunnerApp
 
+try:
+    import customtkinter as ctk
+except ModuleNotFoundError as exc:
+    ctk = None
+    _CTK_IMPORT_ERROR = exc
+else:
+    _CTK_IMPORT_ERROR = None
 
-class XYZRunnerGUI(ctk.CTk):
+
+class XYZRunnerGUI(ctk.CTk if ctk else object):
     def __init__(self):
         super().__init__()
         self.title("XYZ Runner Launcher")
@@ -139,6 +146,12 @@ class XYZRunnerGUI(ctk.CTk):
 
 
 def main():
+    if ctk is None:
+        print(
+            "customtkinter が未導入です。GUIを使うには `pip install -e \".[gui]\"` "
+            "または `pip install customtkinter` を実行してください。"
+        )
+        raise SystemExit(1) from _CTK_IMPORT_ERROR
     ctk.set_appearance_mode("system")
     ctk.set_default_color_theme("blue")
     app = XYZRunnerGUI()
