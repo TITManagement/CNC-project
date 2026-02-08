@@ -27,7 +27,8 @@ from cnc_common.runtime.config import ConfigLoader
 from cnc_common.runtime.jobs import JobDispatcher
 from cnc_common.runtime.visuals import VisualizationController
 
-ROOT_DIR = Path(__file__).resolve().parents[1]
+SRC_DIR = Path(__file__).resolve().parents[1]
+ROOT_DIR = SRC_DIR.parent
 
 
 def _resolve_resource_path(file_entry: str, context: Mapping[str, Any]) -> Path:
