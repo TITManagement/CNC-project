@@ -13,8 +13,6 @@ authors = [{ name = "CNC Maintainers" }]
 
 dependencies = [
     "matplotlib>=3.5",
-    "numpy>=1.23",
-    "pyserial>=3.5",
     "PyYAML>=5.4",
     "svgpathtools>=1.5",
 ]
