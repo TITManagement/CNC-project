@@ -12,6 +12,7 @@ requires-python = ">=3.8"
 authors = [{ name = "CNC Maintainers" }]
 
 dependencies = [
+    "cnc-drivers>=0.1.0",
     "matplotlib>=3.5",
     "PyYAML>=5.4",
     "svgpathtools>=1.5",
@@ -19,7 +20,6 @@ dependencies = [
 
 [project.optional-dependencies]
 step = ["pythonocc-core>=7.6"]
-machine = ["cnc-drivers>=0.1.0"]
 gui = ["customtkinter>=5.2"]
 
 [project.scripts]
