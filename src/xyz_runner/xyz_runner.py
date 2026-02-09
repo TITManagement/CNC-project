@@ -163,11 +163,17 @@ class XYZRunnerApp:
         config_path: Optional[Path] = None
 
         if not self.args.config:
-            selected_file, job_type = self._prompt_file_selection()
-            if not selected_file:
-                print("処理を終了します。")
-                return
-            config_dir = Path(selected_file).resolve().parent
+            default_cfg = (ROOT_DIR / "drawing_data" / "xyz" / "SIM_basic_gcode.yaml").resolve()
+            if default_cfg.exists():
+                print(f"[INFO] --config 未指定のため既定設定を使用します: {default_cfg}")
+                config_path = default_cfg
+                config_dir = config_path.parent
+            else:
+                selected_file, job_type = self._prompt_file_selection()
+                if not selected_file:
+                    print("処理を終了します。")
+                    return
+                config_dir = Path(selected_file).resolve().parent
         else:
             config_path = Path(self.args.config)
             config_dir = config_path.resolve().parent
