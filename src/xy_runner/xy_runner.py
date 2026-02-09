@@ -608,13 +608,22 @@ class XYRunnerApp:
 
 
 def select_config_interactive():
-    """YAMLをGUIで選択してパスを返す（CLI番号指定は廃止）。"""
+    """引数未指定時は既定YAMLを返す。必要時のみGUI選択へフォールバック。"""
+    default_cfg = (ROOT_DIR / "drawing_data" / "xy" / "SIM_svg_sample.yaml").resolve()
+    if default_cfg.exists():
+        print(f"[INFO] --config 未指定のため既定設定を使用します: {default_cfg}")
+        return str(default_cfg)
+
     adapter = EnvironmentAdapter()
-    chosen = adapter.select_file_dialog(
-        "YAML設定ファイルを選択してください",
-        [("YAML files", "*.yaml"), ("All files", "*.*")],
-        initialdir=str(ROOT_DIR / "drawing_data"),
-    )
+    try:
+        chosen = adapter.select_file_dialog(
+            "YAML設定ファイルを選択してください",
+            [("YAML files", "*.yaml"), ("All files", "*.*")],
+            initialdir=str(ROOT_DIR / "drawing_data"),
+        )
+    except Exception as exc:
+        print(f"YAML選択ダイアログの起動に失敗しました: {exc}")
+        sys.exit(1)
     if chosen:
         resolved = Path(chosen).expanduser().resolve()
         print(f": {resolved}")
