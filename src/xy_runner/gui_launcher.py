@@ -6,6 +6,8 @@ from a single window and then runs the runner with those selections.
 """
 from __future__ import annotations
 
+import sys
+import importlib.util
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Optional
@@ -13,7 +15,18 @@ from typing import Optional
 import tkinter.filedialog as fd
 import tkinter.font as tkfont
 
-from xy_runner.xy_runner import XYRunnerApp
+try:
+    from .xy_runner import XYRunnerApp
+except ImportError:
+    # Support direct script execution:
+    #   python src/xy_runner/gui_launcher.py
+    runner_path = Path(__file__).resolve().with_name("xy_runner.py")
+    spec = importlib.util.spec_from_file_location("_xy_runner_module", runner_path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"xy_runner.py をロードできません: {runner_path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    XYRunnerApp = module.XYRunnerApp
 
 try:
     import customtkinter as ctk
