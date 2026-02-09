@@ -5,11 +5,16 @@ Select driver, YAML config (optional), and G-code/STEP file from one window.
 from __future__ import annotations
 
 import importlib.util
+import os
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Optional
 
 import tkinter.filedialog as fd
+
+# Tk ベースGUIと整合するバックエンドを優先し、macOS 固有 backend の
+# バイナリ互換エラーを回避する。
+os.environ.setdefault("MPLBACKEND", "TkAgg")
 
 try:
     from .xyz_runner import XYZRunnerApp
