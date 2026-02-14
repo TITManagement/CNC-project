@@ -32,7 +32,7 @@
 ```bash
 python -m xy_runner.xy_runner --config drawing_data/example_xy/SIM_svg_sample.yaml
 # 3D ランナーの例
-python -m xyz_runner.xyz_runner --config drawing_data/example_xyz/SIM_step_sphere.yaml
+python -m xyz_runner.xyz_runner --config drawing_data/xyz/single_sphere_step_sim.yaml
 ```
 
 ### 設定ファイル
@@ -41,7 +41,7 @@ python -m xyz_runner.xyz_runner --config drawing_data/example_xyz/SIM_step_spher
 - `drawing_data/example_xy/SIM_svg_grid_circles.yaml` - グリッドパターン生成
 - `drawing_data/example_xy/REAL_chuo_svg.yaml` - 実機（QT-BMM2）制御用設定
 - `drawing_data/example_xy/REAL_gsc02_svg.yaml` - 実機（GSC-02）制御用設定
-- XYZ用サンプル: `SIM_basic_gcode.yaml` / `SIM_gcode_cube.yaml` / `SIM_gcode_spiral.yaml` / `SIM_step_sphere.yaml` / `SIM_step_multi_spheres.yaml` / `SIM_visual_fast.yaml`
+- XYZ用サンプル: `SIM_basic_gcode.yaml` / `cube_gcode_sim_standard.yaml` / `spiral_gcode_sim_standard.yaml` / `single_sphere_step_sim.yaml` / `multi_spheres_step_sim.yaml` / `visual_demo_sim_fast.yaml`
 - `driver_settings` セクションで `rapid_speed` / `cut_speed` / `accel` を設定すると、中央精機ステージの速度・加速度が適用されます。
 
 `driver: chuo` を使用する場合は、以下のパラメータを必ず指定してください:

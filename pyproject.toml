@@ -16,6 +16,7 @@ dependencies = [
     "matplotlib>=3.5",
     "PyYAML>=5.4",
     "svgpathtools>=1.5",
+    "customtkinter>=5.2",
 ]
 
 [project.optional-dependencies]

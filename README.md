@@ -1,5 +1,7 @@
 # CNC XY/XYZ Runner（クロスプラットフォーム対応）
 
+<!-- README_LEVEL: L1 -->
+
 <div align="center">
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/release/python-380/)
@@ -83,36 +85,34 @@ xy-runner-gui   # venv を有効化した状態で実行
 
 ### 3. CLI で実行（従来スタイル）
 ```bash
-python -m xy_runner.xy_runner --config drawing_data/example_xy/SIM_svg_sample.yaml
+python -m xy_runner.xy_runner --config drawing_data/xy/SIM_svg_sample.yaml
 # 3D ランナー（任意）
-python -m xyz_runner.xyz_runner --config drawing_data/example_xyz/SIM_step_sphere.yaml
+python -m xyz_runner.xyz_runner --config drawing_data/xyz/single_sphere_step_sim.yaml
 ```
 サンプルYAML（XYZ）
 - `SIM_basic_gcode.yaml`（単純なG-code）
-- `SIM_gcode_cube.yaml`（立方体G-code）
-- `SIM_gcode_spiral.yaml`（螺旋G-code）
-- `SIM_step_sphere.yaml`（単一STEP球）
-- `SIM_step_multi_spheres.yaml`（複数STEP球）
-- `SIM_visual_fast.yaml`（高速アニメーションデモ）
+- `cube_gcode_sim_standard.yaml`（立方体G-code）
+- `spiral_gcode_sim_standard.yaml`（螺旋G-code）
+- `single_sphere_step_sim.yaml`（単一STEP球）
+- `multi_spheres_step_sim.yaml`（複数STEP球）
+- `visual_demo_sim_fast.yaml`（高速アニメーションデモ）
 
 ## 構成
 
 ```
-CNC/
+CNC_project/
 ├── src/                    # ソースコード
 │   ├── common/             # 共有ロジック
 │   ├── xy_runner/          # 2D ランナー
 │   │   └── xy_runner.py    # メインスクリプト
 │   └── xyz_runner/         # 3D ランナー
 │       └── xyz_runner.py   # メインスクリプト
-├── drawing_data/               # 設定・サンプル
-│   ├── example_xy/         # XY 用 YAML
-│   ├── example_xyz/        # XYZ 用 YAML (G-code/STEP サンプル)
-│   └── drawing.svg         # SVGサンプル
+├── drawing_data/           # 設定・サンプル
+│   ├── xy/                 # XY 用 YAML / SVG
+│   └── xyz/                # XYZ 用 YAML / G-code / STEP
 ├── docs/                   # ドキュメント
 │   ├── user-guide.md       # ユーザーガイド
 │   └── developer-guide.md  # 開発者ガイド
-├── env_setup.py            # 仮想環境セットアップ補助
 ├── pyproject.toml          # パッケージ設定
 └── README.md               # このファイル
 ```
@@ -124,7 +124,7 @@ motion_params:
   lift_height: 5            # Z軸リフト高さ
 
 ```yaml
-# drawing_data/example_xy/SIM_svg_sample.yaml
+# drawing_data/xy/SIM_svg_sample.yaml
 driver: sim
 svg_file: select            # GUIでSVGファイル選択
 visual:
@@ -234,10 +234,3 @@ MITライセンス（詳細は[LICENSE](LICENSE)参照）
 <div align="center">
 <strong>SVG図形（Inkscape, Illustrator, PowerPoint等）をCNCで自在に動かす！教育・研究・製造現場で活用できます。</strong>
 </div>
-# driver: gsc02 を用いる場合の例（XY ランナー）
-driver: gsc02
-port: /dev/tty.usbserial-GSC02
-baud: 9600
-timeout: 1.5
-write_timeout: 1.5
-mm_per_pulse: 0.001

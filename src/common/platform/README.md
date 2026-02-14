@@ -1,17 +1,16 @@
 # platform サブパッケージ
 
-目的
-- OS や環境依存の処理を抽象化して提供するレイヤーです。ファイルダイアログ、パス操作、環境依存ユーティリティなどをここに集約します。
+<!-- README_LEVEL: L3 -->
 
-主要モジュール
-- `adapter.py` — `EnvironmentAdapter` の実装。プラットフォーム固有の差分を注入するために使用されます。
+## 目的
 
-使い方
-```
-from common.platform.adapter import EnvironmentAdapter
-adapter = EnvironmentAdapter()
-adapter.open_file_dialog(...)
-```
+OS や実行環境に依存する処理を抽象化して提供するレイヤです。ファイルダイアログや環境依存ユーティリティを集約します。
 
-注意
-- GUI やファイルダイアログなどはテスト実行環境で利用できない場合が多いため、ユニットテスト時はモックを使って差し替えてください。
+## 含まれる要素
+
+- `adapter.py`: `EnvironmentAdapter` 実装（環境差分の吸収）
+
+## 更新ルール
+
+- UI 層から直接 OS 依存 API を呼ばず、本パッケージ経由で利用する
+- テストではモック注入できる API 形状を維持する
