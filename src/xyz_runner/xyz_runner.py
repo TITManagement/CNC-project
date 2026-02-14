@@ -16,7 +16,6 @@ import os
 import sys
 from pathlib import Path
 from typing import Mapping, Optional
-import matplotlib.pyplot as plt
 
 from cnc_drivers.driver_base import CncDriver
 from common.gcode import LinearGCodeInterpreter, ModalState3D
@@ -31,6 +30,28 @@ if src_str in sys.path:
     sys.path.remove(src_str)
 sys.path.insert(0, src_str)
 
+
+
+def _get_pyplot():
+    """
+    pyplot を遅延 import する。
+    macOS では既定 backend のバイナリ互換エラー回避のため TkAgg を優先する。
+    """
+    if sys.platform == "darwin" and "MPLBACKEND" not in os.environ:
+        os.environ["MPLBACKEND"] = "TkAgg"
+
+    import matplotlib
+
+    if "MPLBACKEND" in os.environ:
+        try:
+            matplotlib.use(os.environ["MPLBACKEND"], force=True)
+        except Exception:
+            # backend 固定に失敗しても、環境既定 backend で継続
+            pass
+
+    import matplotlib.pyplot as plt
+
+    return plt
 
 
 def _resolve_resource_path(file_entry: str, context: Mapping[str, object]) -> Path:
@@ -350,6 +371,7 @@ class SimDriver3D(CncDriver):
         fps: アニメーションのフレームレート
         title: グラフタイトル
         """
+        plt = _get_pyplot()
         import matplotlib.animation as animation
 
         if not self.tracks:

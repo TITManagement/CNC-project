@@ -6,8 +6,9 @@ from a single window and then runs the runner with those selections.
 """
 from __future__ import annotations
 
-import sys
 import importlib.util
+import subprocess
+import sys
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Optional
@@ -15,18 +16,20 @@ from typing import Optional
 import tkinter.filedialog as fd
 import tkinter.font as tkfont
 
-try:
-    from .xy_runner import XYRunnerApp
-except ImportError:
-    # Support direct script execution:
-    #   python src/xy_runner/gui_launcher.py
-    runner_path = Path(__file__).resolve().with_name("xy_runner.py")
-    spec = importlib.util.spec_from_file_location("_xy_runner_module", runner_path)
-    if spec is None or spec.loader is None:
-        raise ImportError(f"xy_runner.py をロードできません: {runner_path}")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    XYRunnerApp = module.XYRunnerApp
+def _load_xy_runner_app():
+    try:
+        from .xy_runner import XYRunnerApp
+        return XYRunnerApp
+    except ImportError:
+        # Support direct script execution:
+        #   python src/xy_runner/gui_launcher.py
+        runner_path = Path(__file__).resolve().with_name("xy_runner.py")
+        spec = importlib.util.spec_from_file_location("_xy_runner_module", runner_path)
+        if spec is None or spec.loader is None:
+            raise ImportError(f"xy_runner.py をロードできません: {runner_path}")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module.XYRunnerApp
 
 try:
     import customtkinter as ctk
@@ -35,6 +38,26 @@ except ModuleNotFoundError as exc:
     _CTK_IMPORT_ERROR = exc
 else:
     _CTK_IMPORT_ERROR = None
+
+
+def _tk_health_check() -> Optional[str]:
+    """別プロセスで Tk 初期化可否を確認し、abort を親プロセスへ波及させない。"""
+    probe = (
+        "import tkinter as tk; "
+        "root=tk.Tk(); root.withdraw(); root.update_idletasks(); root.destroy()"
+    )
+    proc = subprocess.run(
+        [sys.executable, "-c", probe],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    if proc.returncode == 0:
+        return None
+    detail = (proc.stderr or proc.stdout or "").strip()
+    if not detail:
+        detail = f"tk 初期化に失敗しました (code={proc.returncode})"
+    return detail
 
 
 class RunnerGUI(ctk.CTk if ctk else object):
@@ -142,6 +165,7 @@ class RunnerGUI(ctk.CTk if ctk else object):
         self.status_var.set("Running... (UI is locked until done)")
         self.update_idletasks()
         try:
+            xy_runner_app = _load_xy_runner_app()
             args = SimpleNamespace(
                 config=str(yaml_path),
                 driver=driver,
@@ -149,7 +173,7 @@ class RunnerGUI(ctk.CTk if ctk else object):
                 no_animate=False,
                 debug=False,
             )
-            app = XYRunnerApp(args)
+            app = xy_runner_app(args)
             # Matplotlib GUI must run on the main thread; block here
             app.run(svg_override=svg_path)
             self.status_var.set("Done")
@@ -177,6 +201,11 @@ def main():
             "または `pip install customtkinter` を実行してください。"
         )
         raise SystemExit(1) from _CTK_IMPORT_ERROR
+    tk_error = _tk_health_check()
+    if tk_error:
+        print("Tk GUI 初期化に失敗しました。Python/Tk の組み合わせを見直してください。")
+        print(f"詳細: {tk_error}")
+        raise SystemExit(1)
     ctk.set_appearance_mode("system")
     ctk.set_default_color_theme("blue")
     app = RunnerGUI()
