@@ -66,10 +66,15 @@ python3 -m venv .venv_CNC
 source .venv_CNC/bin/activate
 
 # 依存ライブラリインストール（開発モード）
-pip install --no-build-isolation -e .
+python -m pip install --no-build-isolation -e .
+python -m pip check
 ```
 
 Windows の場合は `.\.venv_CNC\Scripts\activate` を使用してください。
+`python -m pip -V` で `.venv_CNC` 配下の pip が使われていることを確認してください。
+
+> **依存更新ルール（再発防止）**  
+> `cnc-drivers` を更新した場合は version を上げ、`lab_automation_libs/internal-PyPI/dist/` の wheel を更新してください。同一バージョン差し替えはキャッシュ衝突の原因になります。
 
 ## 使い方
 
